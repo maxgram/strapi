@@ -6,27 +6,21 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, merge } from 'lodash';
-import Loadable from 'react-loadable';
+import { isEmpty, isObject, merge } from 'lodash';
+
 // Design
-import InputAddonWithErrors from 'components/InputAddonWithErrors';
-import InputCheckboxWithErrors from 'components/InputCheckboxWithErrors';
-import InputDateWithErrors from 'components/InputDateWithErrors';
-import InputEmailWithErrors from 'components/InputEmailWithErrors';
-import InputFileWithErrors from 'components/InputFileWithErrors';
-import InputNumberWithErrors from 'components/InputNumberWithErrors';
-import InputSearchWithErrors from 'components/InputSearchWithErrors';
-import InputSelectWithErrors from 'components/InputSelectWithErrors';
-import InputPasswordWithErrors from 'components/InputPasswordWithErrors';
-import InputTextAreaWithErrors from 'components/InputTextAreaWithErrors';
-import InputTextWithErrors from 'components/InputTextWithErrors';
-import InputToggleWithErrors from 'components/InputToggleWithErrors';
-// import WysiwygWithErrors from 'components/WysiwygWithErrors';
-const Loading = () => <div>Loading ...</div>;
-const LoadableWysiwyg = Loadable({
-  loader: () => import('components/WysiwygWithErrors'),
-  loading: Loading,
-});
+import InputAddonWithErrors from '../InputAddonWithErrors';
+import InputCheckboxWithErrors from '../InputCheckboxWithErrors';
+import InputDateWithErrors from '../InputDateWithErrors';
+import InputEmailWithErrors from '../InputEmailWithErrors';
+import InputFileWithErrors from '../InputFileWithErrors';
+import InputNumberWithErrors from '../InputNumberWithErrors';
+import InputSearchWithErrors from '../InputSearchWithErrors';
+import InputSelectWithErrors from '../InputSelectWithErrors';
+import InputPasswordWithErrors from '../InputPasswordWithErrors';
+import InputTextAreaWithErrors from '../InputTextAreaWithErrors';
+import InputTextWithErrors from '../InputTextWithErrors';
+import InputToggleWithErrors from '../InputToggleWithErrors';
 
 const DefaultInputError = ({ type }) => <div>Your input type: <b>{type}</b> does not exist</div>;
 
@@ -44,7 +38,6 @@ const inputs = {
   text: InputTextWithErrors,
   textarea: InputTextAreaWithErrors,
   toggle: InputToggleWithErrors,
-  wysiwyg: LoadableWysiwyg,
 };
 
 function InputsIndex(props) {
@@ -60,6 +53,9 @@ function InputsIndex(props) {
       break;
     case 'file':
       inputValue = props.value || [];
+      break;
+    case 'json':
+      inputValue = isObject(props.value) ? props.value : null;
       break;
     default:
       inputValue = props.value || '';

@@ -10,7 +10,7 @@ import { isEmpty, isObject, map } from 'lodash';
 import cn from 'classnames';
 
 // Design
-import SelectOption from 'components/SelectOption';
+import SelectOption from '../SelectOption';
 
 import styles from './styles.scss';
 
@@ -32,16 +32,29 @@ function InputSelect(props) {
       onBlur={props.onBlur}
       onChange={props.onChange}
       onFocus={props.onFocus}
+      ref={props.inputRef}
       style={props.style}
       tabIndex={props.tabIndex}
       value={props.value}
     >
       {map(props.selectOptions, (option, key) => {
         if (isObject(option)) {
-          return <SelectOption key={key} {...option} />;
+          if (option.label) {
+            return (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            );
+          } else {
+            return <SelectOption key={key} {...option} />;
+          }
         }
 
-        return <option key={key} value={option}>{option}</option>;
+        return (
+          <option key={key} value={option}>
+            {option}
+          </option>
+        );
       })}
     </select>
   );
@@ -53,6 +66,7 @@ InputSelect.defaultProps = {
   deactivateErrorHighlight: false,
   disabled: false,
   error: false,
+  inputRef: () => {},
   onBlur: () => {},
   onFocus: () => {},
   style: {},
@@ -65,6 +79,7 @@ InputSelect.propTypes = {
   deactivateErrorHighlight: PropTypes.bool,
   disabled: PropTypes.bool,
   error: PropTypes.bool,
+  inputRef: PropTypes.func,
   name: PropTypes.string.isRequired,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,

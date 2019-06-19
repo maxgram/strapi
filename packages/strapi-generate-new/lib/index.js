@@ -23,7 +23,7 @@ module.exports = {
   targets: {
 
     // Call the `admin` generator.
-    '.': ['admin'],
+    // '.': ['admin'],
 
     // Main package.
     'package.json': {
@@ -34,12 +34,17 @@ module.exports = {
       jsonfile: database
     },
 
+    'config/environments/production/database.json': {
+      jsonfile: database
+    },
+
+    'config/environments/staging/database.json': {
+      jsonfile: database
+    },
+
     // Copy dot files.
     '.editorconfig': {
       copy: 'editorconfig'
-    },
-    '.npmignore': {
-      copy: 'npmignore'
     },
     '.gitignore': {
       copy: 'gitignore'
@@ -55,9 +60,17 @@ module.exports = {
       folder: {}
     },
 
+    'api/.gitkeep': {
+      copy: 'gitkeep'
+    },
+
     // Empty plugins directory.
-    'plugins': {
+    'extensions': {
       folder: {}
+    },
+    
+    'extensions/.gitkeep': {
+      copy: 'gitkeep'
     },
 
     // Empty public directory.
@@ -69,7 +82,10 @@ module.exports = {
     'public/uploads': {
       folder: {}
     },
-
+    // Copy gitkeep into uploads directory.
+    'public/uploads/.gitkeep': {
+      copy: 'gitkeep'
+    },
     // Empty node_modules directory.
     'node_modules': {
       folder: {}

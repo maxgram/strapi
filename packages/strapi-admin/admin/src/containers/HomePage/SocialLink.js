@@ -7,12 +7,12 @@ import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
-import Gh from 'assets/images/social_gh.png';
-import Slack from 'assets/images/social_slack.png';
-import Medium from 'assets/images/social_medium.png';
-import So from 'assets/images/social_so.png';
-import Twitter from 'assets/images/social_twitter.png';
-import Reddit from 'assets/images/social_reddit.png';
+import Gh from '../../assets/images/social_gh.png';
+import Slack from '../../assets/images/social_slack.png';
+import Medium from '../../assets/images/social_medium.png';
+import So from '../../assets/images/social_so.png';
+import Twitter from '../../assets/images/social_twitter.png';
+import Reddit from '../../assets/images/social_reddit.png';
 
 import styles from './styles.scss';
 
@@ -36,15 +36,31 @@ function getSrc(name) {
   }
 }
 
-function SocialLink({ link, name }) {
-  return (
-    <div className={cn(styles.socialLink, 'col-md-6 col-lg-6')}>
-      <a href={link} target="_blank">
-        <div><img src={getSrc(name)} /></div>
-        <span>{name}</span>
-      </a>
-    </div>
-  );
+class SocialLink extends React.PureComponent {
+  state = { imgLoaded: false };
+
+  handleImgLoaded = () => this.setState({ imgLoaded: true });
+
+  render() {
+    const { link, name } = this.props;
+    const { imgLoaded } = this.state;
+
+    return (
+      <div className={cn(styles.socialLink, 'col-md-6 col-lg-6')}>
+        <a href={link} target="_blank">
+          <div>
+            {!imgLoaded && (
+              <div className={styles.spinner}>
+                <div />
+              </div>
+            )}
+            <img src={getSrc(name)} onLoad={this.handleImgLoaded} />
+          </div>
+          <span>{name}</span>
+        </a>
+      </div>
+    );
+  }
 }
 
 SocialLink.propTypes = {

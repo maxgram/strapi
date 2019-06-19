@@ -1,50 +1,41 @@
 ---
 name: 🐛 Bug Report
-about: Create a report to help us improve 🤔.
+about: Create an issue report.
 ---
 
 <!--
-⚠️ If you do not respect these two points, your issue will be closed.
-- Don't forget the checkbox at the end of your issue.
-- Respect this template.
+Hello 👋 Thank you for submitting an issue.
+
+Before you start, please make sure your issue is understandable and reproducible.
+To make your issue readable make sure you use valid Markdown syntax.
+
+https://guides.github.com/features/mastering-markdown/
 -->
 
-<!-- ⚠️ Before writing your issue make sure you are using:-->
-<!-- Node 9.x.x -->
-<!-- npm 5.x.x -->
-<!-- The latest version of Strapi. -->
+**Describe the bug**
+A clear and concise description of what the bug is.
 
-**Informations**
-- **Node.js version**:
-- **npm version**:
-- **Strapi version**:
-- **Database**:
-- **Operating system**:
+**Steps to reproduce the behavior**
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
 
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
-**What is the current behavior?**
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
 
+**Code snippets**
+If applicable, add code samples to help explain your problem.
 
+**System**
+- Node.js version: <!-- Please ensure you are using the Node LTS version (v10) -->
+- NPM version:
+- Strapi version: <!-- Please make sure you are on the latest version -->
+- Database:
+- Operating system:
 
-**Steps to reproduce the problem**
-
-
-
-**What is the expected behavior?**
-
-
-
-**Suggested solutions**
-
-
-
----
-
-<!-- ⚠️ Make sure to browse the opened and closed issues. -->
-
-- [ ] I'm sure that this feature hasn't already been referenced.
-
-<!--
-⬆️ Don't delete this checkbox from your issue and approve it.
-Add an `x` ->  [x] or click on the checkbox when your issue is created.
--->
+**Additional context**
+Add any other context about the problem here.

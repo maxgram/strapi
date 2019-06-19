@@ -1,7 +1,7 @@
 
 // Public dependencies.
 const _ = require('lodash');
-
+/* eslint-disable prefer-template */
 module.exports = {
   get: function (policy, plugin, policies = [], endpoint, currentApiName) {
     // Define global policy prefix.
@@ -12,16 +12,21 @@ module.exports = {
     // Looking for global policy or namespaced.
     if (
       _.startsWith(policy, globalPolicyPrefix, 0) &&
-      !_.isEmpty(
-        strapi.config.policies,
-        policy.replace(globalPolicyPrefix, '')
+      !_.isUndefined(
+        _.get(
+          strapi.config.policies,
+          policy.replace(globalPolicyPrefix, '').toLowerCase()
+        )
       )
     ) {
       // Global policy.
       return policies.push(
-        this.parsePolicy(strapi.config.policies[
-          policy.replace(globalPolicyPrefix, '').toLowerCase()
-        ])
+        this.parsePolicy(
+          _.get(
+            strapi.config.policies,
+            policy.replace(globalPolicyPrefix, '').toLowerCase()
+          )
+        )
       );
     } else if (
       _.startsWith(policy, pluginPolicyPrefix, 0) &&

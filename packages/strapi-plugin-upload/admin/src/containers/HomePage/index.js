@@ -12,24 +12,20 @@ import { injectIntl } from 'react-intl';
 import { bindActionCreators, compose } from 'redux';
 import { isEmpty } from 'lodash';
 
-// You can find these components in either
-// ./node_modules/strapi-helper-plugin/lib/src
-// or strapi/packages/strapi-helper-plugin/lib/src
-import ContainerFluid from 'components/ContainerFluid';
-import InputSearch from 'components/InputSearch';
-// import InputSelect from 'components/InputSelect';
-import PageFooter from 'components/PageFooter';
-import PluginHeader from 'components/PluginHeader';
+import {
+  getQueryParameters,
+  ContainerFluid,
+  InputSearch,
+  PageFooter,
+  PluginHeader,
+} from 'strapi-helper-plugin';
+
+import pluginId from '../../pluginId';
 
 // Plugin's component
-import EntriesNumber from 'components/EntriesNumber';
-import List from 'components/List';
-import PluginInputFile from 'components/PluginInputFile';
-
-// Utils
-import getQueryParameters from 'utils/getQueryParameters';
-import injectReducer from 'utils/injectReducer';
-import injectSaga from 'utils/injectSaga';
+import EntriesNumber from '../../components/EntriesNumber';
+import List from '../../components/List';
+import PluginInputFile from '../../components/PluginInputFile';
 
 // Actions
 import {
@@ -51,19 +47,17 @@ import reducer from './reducer';
 import saga from './saga';
 
 export class HomePage extends React.Component {
-  getChildContext = () => (
-    {
-      deleteData: this.props.deleteData,
-    }
-  );
+  getChildContext = () => ({
+    deleteData: this.props.deleteData,
+  });
 
   componentWillMount() {
     if (!isEmpty(this.props.location.search)) {
-      const page = parseInt(this.getURLParams('page'), 10);
-      const limit = parseInt(this.getURLParams('limit'), 10);
-      const sort = this.getURLParams('sort');
+      const _page = parseInt(this.getURLParams('_page'), 10);
+      const _limit = parseInt(this.getURLParams('_limit'), 10);
+      const _sort = this.getURLParams('_sort');
 
-      this.props.setParams({ limit, page, sort });
+      this.props.setParams({ _limit, _page, _sort });
     }
   }
   componentDidMount() {
@@ -79,35 +73,40 @@ export class HomePage extends React.Component {
     }
   }
 
-  getURLParams = (type) => getQueryParameters(this.props.location.search, type);
+  getURLParams = type => getQueryParameters(this.props.location.search, type);
 
-  changeSort = (name) => {
-    const { params: { limit, page } } = this.props;
+  changeSort = name => {
+    const {
+      params: { _limit, _page },
+    } = this.props;
     const target = {
-      name: 'params.sort',
+      name: 'params._sort',
       value: name,
     };
-    const search = `page=${page}&limit=${limit}&sort=${name}`;
+    const search = `_page=${_page}&_limit=${_limit}&_sort=${name}`;
 
     this.props.changeParams({ target });
     this.props.history.push({
       pathname: this.props.history.pathname,
       search,
     });
-  }
+  };
 
-  handleChangeParams = (e) => {
+  handleChangeParams = e => {
     const { history, params } = this.props;
-    const search = e.target.name === 'params.limit' ?
-      `page=${params.page}&limit=${e.target.value}&sort=${params.sort}`
-      : `page=${e.target.value}&limit=${params.limit}&sort=${params.sort}`;
+    const search =
+      e.target.name === 'params._limit'
+        ? `_page=${params._page}&_limit=${e.target.value}&_sort=${params._sort}`
+        : `_page=${e.target.value}&_limit=${params._limit}&_sort=${
+          params._sort
+        }`;
     this.props.history.push({
       pathname: history.pathname,
       search,
     });
 
     this.props.changeParams(e);
-  }
+  };
 
   renderInputSearch = () => (
     <InputSearch
@@ -118,7 +117,7 @@ export class HomePage extends React.Component {
       style={{ marginTop: '-10px' }}
       value={this.props.search}
     />
-  )
+  );
 
   render() {
     return (
@@ -142,12 +141,12 @@ export class HomePage extends React.Component {
         <div className={styles.entriesWrapper}>
           <div>
             {/* NOTE: Prepare for bulk actions}
-            <InputSelect
+              <InputSelect
               name="bulkAction"
               onChange={() => console.log('change')}
               selectOptions={[{ value: 'select all'}]}
               style={{ minWidth: '200px', height: '32px', marginTop: '-8px' }}
-            />
+              />
             */}
           </div>
           <EntriesNumber number={this.props.entriesNumber} />
@@ -155,7 +154,7 @@ export class HomePage extends React.Component {
         <List
           data={this.props.uploadedFiles}
           changeSort={this.changeSort}
-          sort={this.props.params.sort}
+          sort={this.props.params._sort}
         />
         <div className="col-md-12">
           <PageFooter
@@ -179,9 +178,9 @@ HomePage.contextTypes = {
 
 HomePage.defaultProps = {
   params: {
-    limit: 10,
-    page: 1,
-    sort: 'updatedAt',
+    _limit: 10,
+    _page: 1,
+    _sort: 'updatedAt',
   },
   uploadedFiles: [],
 };
@@ -219,10 +218,17 @@ function mapDispatchToProps(dispatch) {
 
 const mapStateToProps = selectHomePage();
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
-const withReducer = injectReducer({ key: 'homePage', reducer });
-const withSaga = injectSaga({ key: 'homePage', saga });
+const withReducer = strapi.injectReducer({
+  key: 'homePage',
+  reducer,
+  pluginId,
+});
+const withSaga = strapi.injectSaga({ key: 'homePage', saga, pluginId });
 
 export default compose(
   withReducer,

@@ -5,11 +5,12 @@
  */
 
 import { createSelector } from 'reselect';
+import pluginId from '../../pluginId';
 
 /**
 * Direct selector to the listPage state domain
 */
-const selectListPageDomain = () => state => state.get('listPage');
+const selectListPageDomain = () => state => state.get(`${pluginId}_listPage`);
 
 
 /**
@@ -30,8 +31,14 @@ const makeSelectParams = () => createSelector(
   (substate) => substate.get('params').toJS(),
 );
 
+const makeSelectFilters = () => createSelector(
+  selectListPageDomain(),
+  (substate) => substate.get('filters').toJS(),
+);
+
 export default makeSelectListPage;
 export {
   makeSelectParams,
+  makeSelectFilters,
   selectListPageDomain,
 };

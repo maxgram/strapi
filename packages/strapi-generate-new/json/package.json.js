@@ -6,7 +6,6 @@
 
 // Public node modules.
 const _ = require('lodash');
-const uuid = require('uuid/v4');
 
 /**
  * Expose main package JSON of the application
@@ -35,24 +34,25 @@ module.exports = scope => {
     'private': true,
     'version': '0.1.0',
     'description': 'A Strapi application.',
-    'main': './server.js',
     'scripts': {
-      'setup': 'cd admin && npm run setup', // Ready to deploy setup
-      'start': 'node server.js',
-      'strapi': 'node_modules/strapi/bin/strapi.js', // Allow to use `npm run strapi` CLI,
-      'lint': 'node_modules/.bin/eslint api/**/*.js config/**/*.js plugins/**/*.js',
-      'postinstall': 'node node_modules/strapi/lib/utils/post-install.js'
+      'develop': 'strapi develop',
+      'start': 'strapi start',
+      'build': 'strapi build',
+      'strapi': 'strapi', // Allow to use `npm run strapi` CLI,
+      'lint': 'eslint api/**/*.js config/**/*.js plugins/**/*.js'
     },
     'devDependencies': {
       'babel-eslint': '^7.1.1',
-      'eslint': '^3.12.2',
+      'eslint': '^4.19.1',
       'eslint-config-airbnb': '^13.0.0',
-      'eslint-plugin-import': '^2.2.0',
-      'eslint-plugin-react': '^6.8.0'
+      'eslint-plugin-import': '^2.11.0',
+      'eslint-plugin-react': '^7.7.0'
     },
     'dependencies': Object.assign({}, {
-      'lodash': '4.x.x',
+      'lodash': '^4.17.5',
       'strapi': getDependencyVersion(cliPkg, 'strapi'),
+      'strapi-admin': getDependencyVersion(cliPkg, 'strapi'),
+      'strapi-utils': getDependencyVersion(cliPkg, 'strapi'),
       [scope.client.connector]: getDependencyVersion(cliPkg, 'strapi'),
     }, additionalsDependencies, {
       [scope.client.module]: scope.client.version
@@ -68,11 +68,11 @@ module.exports = scope => {
       'url': scope.website || ''
     }],
     'strapi': {
-      'uuid': uuid()
+      'uuid': scope.uuid
     },
     'engines': {
-      'node': '>= 9.0.0',
-      'npm': '>= 5.0.0'
+      "node": "^10.0.0",
+      "npm": ">= 6.0.0"
     },
     'license': scope.license || 'MIT'
   });

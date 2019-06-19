@@ -8,8 +8,10 @@ import styles from './styles.scss';
 
 /* eslint-disable jsx-a11y/no-autofocus */
 function InputNumber(props) {
+  const formattedPlaceholder = props.placeholder === '' ? 'app.utils.placeholder.defaultMessage' : props.placeholder;
+  
   return (
-    <FormattedMessage id={props.placeholder} defaultMessage={props.placeholder}>
+    <FormattedMessage id={formattedPlaceholder} defaultMessage={formattedPlaceholder}>
       {(message) => (
         <input
           autoFocus={props.autoFocus}
@@ -26,6 +28,8 @@ function InputNumber(props) {
           onChange={props.onChange}
           onFocus={props.onFocus}
           placeholder={message}
+          ref={props.inputRef}
+          step={!Number.isNaN(Number(props.step)) ? Number(props.step) : 1}
           style={props.style}
           tabIndex={props.tabIndex}
           type="number"
@@ -42,9 +46,11 @@ InputNumber.defaultProps = {
   deactivateErrorHighlight: false,
   disabled: false,
   error: false,
+  inputRef: () => {},
   onBlur: () => {},
   onFocus: () => {},
   placeholder: 'app.utils.placeholder.defaultMessage',
+  step: 1,
   style: {},
   tabIndex: '0',
 };
@@ -55,11 +61,13 @@ InputNumber.propTypes = {
   deactivateErrorHighlight: PropTypes.bool,
   disabled: PropTypes.bool,
   error: PropTypes.bool,
+  inputRef: PropTypes.func,
   name: PropTypes.string.isRequired,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   placeholder: PropTypes.string,
+  step: PropTypes.number,
   style: PropTypes.object,
   tabIndex: PropTypes.string,
   value: PropTypes.oneOfType([
