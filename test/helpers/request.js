@@ -1,35 +1,30 @@
-const request = require('request-promise-native');
+'use strict';
 
-const createRequest = (defaults = {}) => {
-  const client = request.defaults({
-    baseUrl: 'http://localhost:1337',
-    json: true,
-    resolveWithFullResponse: true,
-    ...defaults,
-  });
+const { createAgent } = require('./agent');
+const { superAdmin } = require('./strapi');
 
-  return async options => {
-    const params = JSON.parse(JSON.stringify(options));
+const createRequest = ({ strapi } = {}) => createAgent(strapi);
 
-    for (let key in params.formData) {
-      if (typeof params.formData[key] === 'object') {
-        params.formData[key] = JSON.stringify(params.formData[key]);
-      }
-    }
-
-    return client(params);
-  };
+const createContentAPIRequest = ({ strapi } = {}) => {
+  return createAgent(strapi, { urlPrefix: '/api', token: 'test-token' });
 };
 
-const createAuthRequest = token => {
-  return createRequest({
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+const createAuthRequest = ({ strapi, userInfo = superAdmin.credentials }) => {
+  return createAgent(strapi).login(userInfo);
+};
+
+const transformToRESTResource = input => {
+  if (Array.isArray(input)) {
+    return input.map(value => transformToRESTResource(value));
+  }
+
+  const { id, ...attributes } = input;
+  return { id, attributes };
 };
 
 module.exports = {
   createRequest,
+  createContentAPIRequest,
   createAuthRequest,
+  transformToRESTResource,
 };

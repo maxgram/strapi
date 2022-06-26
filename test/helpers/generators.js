@@ -1,163 +1,130 @@
+'use strict';
+
 module.exports = {
   article: {
-    attributes: [
-      {
-        name: 'title',
-        params: {
-          appearance: {
-            WYSIWYG: false,
-          },
-          multiple: false,
-          type: 'string',
-        },
+    attributes: {
+      title: {
+        type: 'string',
       },
-      {
-        name: 'content',
-        params: {
-          appearance: {
-            WYSIWYG: true,
-          },
-          multiple: false,
-          type: 'text',
-        },
+      date: {
+        type: 'date',
       },
-      {
-        name: 'author',
-        params: {
-          nature: 'manyToOne',
-          target: 'user',
-          pluginValue: 'users-permissions',
-          key: 'articles',
-          plugin: true,
-        },
+      jsonField: {
+        type: 'json',
       },
-    ],
-    connection: 'default',
-    name: 'article',
+      content: {
+        type: 'richtext',
+      },
+      author: {
+        type: 'relation',
+        relation: 'manyToOne',
+        target: 'plugin::users-permissions.user',
+        targetAttribute: 'articles',
+      },
+    },
+    uid: 'api::article.article',
+    displayName: 'Article',
+    singularName: 'article',
+    pluralName: 'articles',
     description: '',
     collectionName: '',
   },
   tag: {
-    attributes: [
-      {
-        name: 'name',
-        params: {
-          appearance: {
-            WYSIWYG: false,
-          },
-          multiple: false,
-          type: 'string',
-        },
+    attributes: {
+      name: {
+        type: 'string',
       },
-      {
-        name: 'articles',
-        params: {
-          dominant: true,
-          nature: 'manyToMany',
-          target: 'article',
-          key: 'tags',
-        },
+      articles: {
+        type: 'relation',
+        relation: 'manyToMany',
+        target: 'api::article.article',
+        targetAttribute: 'tags',
       },
-    ],
-    connection: 'default',
-    name: 'tag',
+    },
+    uid: 'api::tag.tag',
+    displayName: 'Tag',
+    singularName: 'tag',
+    pluralName: 'tags',
     description: '',
     collectionName: '',
   },
   category: {
-    attributes: [
-      {
-        name: 'name',
-        params: {
-          appearance: {
-            WYSIWYG: false,
-          },
-          multiple: false,
-          type: 'string',
-        },
+    attributes: {
+      name: {
+        type: 'string',
       },
-      {
-        name: 'articles',
-        params: {
-          nature: 'oneToMany',
-          target: 'article',
-          key: 'category',
-        },
+      articles: {
+        type: 'relation',
+        relation: 'oneToMany',
+        target: 'api::article.article',
+        targetAttribute: 'category',
       },
-    ],
-    connection: 'default',
-    name: 'category',
+    },
+    uid: 'api::category.category',
+    displayName: 'Category',
+    singularName: 'category',
+    pluralName: 'categories',
     description: '',
     collectionName: '',
   },
   reference: {
-    attributes: [
-      {
-        name: 'name',
-        params: {
-          appearance: {
-            WYSIWYG: false,
-          },
-          multiple: false,
-          type: 'string',
-        },
+    attributes: {
+      name: {
+        type: 'string',
       },
-      {
-        name: 'article',
-        params: {
-          target: 'article',
-          key: 'reference',
-          nature: 'oneToOne',
-        },
+      article: {
+        type: 'relation',
+        relation: 'oneToOne',
+        target: 'api::article.article',
+        targetAttribute: 'reference',
       },
-      {
-        name: 'tag',
-        params: {
-          nature: 'oneWay',
-          target: 'tag',
-        },
+      tag: {
+        type: 'relation',
+        relation: 'oneToOne',
+        target: 'api::tag.tag',
       },
-    ],
-    connection: 'default',
-    name: 'reference',
+    },
+    uid: 'api::reference.reference',
+    displayName: 'Reference',
+    singularName: 'reference',
+    pluralName: 'references',
+    description: '',
+    collectionName: 'refs',
+  },
+  product: {
+    attributes: {
+      name: {
+        type: 'string',
+      },
+      description: {
+        type: 'richtext',
+      },
+      published: {
+        type: 'boolean',
+      },
+    },
+    uid: 'api::product.product',
+    displayName: 'Product',
+    singularName: 'product',
+    pluralName: 'products',
     description: '',
     collectionName: '',
   },
-  product: {
-    attributes: [
-      {
-        name: 'name',
-        params: {
-          appearance: {
-            WYSIWYG: false,
-          },
-          multiple: false,
-          type: 'string',
-        },
+  articlewithtag: {
+    attributes: {
+      title: {
+        type: 'string',
       },
-      {
-        name: 'description',
-        params: {
-          appearance: {
-            WYSIWYG: true,
-          },
-          multiple: false,
-          type: 'text',
-        },
+      tags: {
+        type: 'relation',
+        relation: 'oneToMany',
+        target: 'api::tag.tag',
       },
-      {
-        name: 'published',
-        params: {
-          appearance: {
-            WYSIWYG: false,
-          },
-          multiple: false,
-          type: 'boolean',
-        },
-      },
-    ],
-    connection: 'default',
-    name: 'product',
+    },
+    uid: 'api::articlewit.articlewit',
+    displayName: 'Article with tag',
+    singularName: 'articlewithtag',
+    pluralName: 'articlewithtags',
     description: '',
     collectionName: '',
   },
